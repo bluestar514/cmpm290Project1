@@ -207,7 +207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wordList: []
-  wordNodePrefab: {fileID: 1498502015111554, guid: b3d78056942436444af7c977e07b4ef7,
+  wordNodePrefab: {fileID: 1485531038119630, guid: b3d78056942436444af7c977e07b4ef7,
     type: 2}
   nodeField: {fileID: 221311300}
 --- !u!4 &221311300

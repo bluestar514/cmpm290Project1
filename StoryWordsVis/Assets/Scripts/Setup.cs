@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Setup : MonoBehaviour {
 
@@ -11,10 +12,14 @@ public class Setup : MonoBehaviour {
 	void Awake () {
         LoadJSON();
 
+        sortWordList(wordList);
+
         List<GameObject> wordNodeList = new List<GameObject>(); 
-        foreach(wordData word in wordList){
-            wordNodeList.Add(createWordNode(word));
-        }
+        //foreach(wordData word in wordList){
+            wordNodeList.Add(createWordNode(wordList[0]));
+        print("Making second node");
+            wordNodeList.Add(createWordNode(wordList[1]));
+        //}
 
 	}
 	
@@ -25,19 +30,50 @@ public class Setup : MonoBehaviour {
         wordList = wordListWrapper.wordList;
     }
 
+    void sortWordList(List<wordData> listOWordData){
+        listOWordData.Sort((a, b) => (b.getFreq().CompareTo(a.getFreq())));
+    }
+
     GameObject createWordNode(wordData word){
-        GameObject node = Instantiate(wordNodePrefab, pickRandomPoint(), new Quaternion(), nodeField);
-        node.name.Replace("(Clone)", word.ToString());
-        node.GetComponent<node>().wordData = word;
-        return node;   
+        int maxRange = 10;
+        Vector3 pos = pickRandomPoint(maxRange);
+        GameObject nodeObj = Instantiate(wordNodePrefab, pos, new Quaternion(), nodeField);
+        nodeObj.name = nodeObj.name.Replace("(Clone)", word.ToString());
+        nodeObj.GetComponent<node>().wordData = word;
+
+
+        float nodeSize = nodeObj.GetComponent<node>().scaleCorrectly();
+        
+        while(nodeObj.GetComponent<node>().colliding()){
+            maxRange += 10;
+            nodeObj.transform.SetPositionAndRotation(pickRandomPoint(maxRange), new Quaternion());
+            
+        }
+
+        return nodeObj;   
     }
 
 
-    Vector3 pickRandomPoint(){
+    bool collides(Vector3 center, float radius){
+        print(center);
+        print(radius);
+        Collider[] hitColliders = Physics.OverlapSphere(center, radius);
+        print(hitColliders.Length);
+        
+        if(hitColliders.Length > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    Vector3 pickRandomPoint(float max){
         Vector3 point = new Vector3();
-        point.x = (Random.value - .5f)*100;
-        point.y = (Random.value - .5f)*100;
-        point.z = (Random.value - .5f)*100;
+        point.x = (Random.value - .5f)*max;
+        point.y = (Random.value - .5f)*max;
+        point.z = (Random.value - .5f)*max;
+
+        print("new pos" + point);
         return point;
     }
 }
