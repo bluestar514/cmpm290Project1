@@ -87,10 +87,50 @@ for bigramCountPair in mostCommonBigrams:
 
 	wordDict[word1][pos1]["followedBy"].append((word2,freq))
 
+wordList = []
 
-# print("\nwordDict: ")
-# pp.pprint(wordDict)
+for word in wordDict:
+	wordFreq = {"word":word}
+	wordData = {"wordFreq":wordFreq}
+	posList = []
+
+	freq = 0
+
+	mostFreqPos = "none"
+	countOfMostFreqPOS = 0
+
+	for pos in wordDict[word]:
+		posFreq = {"word":pos,
+				   "freq":wordDict[word][pos]["freq"]}
+		posData = {"posFreq":posFreq}
+		followedBy = []
+
+		freq += wordDict[word][pos]["freq"]
+
+		if countOfMostFreqPOS < wordDict[word][pos]["freq"]:
+			mostFreqPos = pos
+			countOfMostFreqPOS = wordDict[word][pos]["freq"]
+
+		for follower in wordDict[word][pos]["followedBy"]:
+			followerWord = follower[0][0]
+			followerPos = follower[0][1]
+			followerFreq = follower[1]
+			followedBy.append({ "word": followerWord,
+								"pos": followerPos,
+								"freq": followerFreq})
+		posData["followedBy"] = followedBy
+
+		posList.append(posData)
+
+	wordData["posList"] = posList
+	wordData["wordFreq"]["freq"] = freq
+	wordData["wordFreq"]["pos"] = mostFreqPos
+
+	wordList.append(wordData)
+
+print("\nwordList: ")
+pp.pprint(wordList)
 
 jsonFile = open(jsonPATH, 'w')
-jsonFile.write(json.dumps(wordDict))
+jsonFile.write(json.dumps({"wordList":wordList}))
 jsonFile.close()
