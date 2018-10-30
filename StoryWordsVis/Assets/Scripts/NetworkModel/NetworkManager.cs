@@ -7,6 +7,8 @@ public class NetworkManager : Manager {
     public GameObject wordNodePrefab;
     public GameObject connectionPrefab;
     public Transform nodeField;
+    public GameObject camera;    
+
     Dictionary<string, GameObject> wordNodeDict;
     List<GameObject> connectionList;
     Dictionary<string, Dictionary<string, Dictionary<string, GameObject>>> wordConnectionDict;
@@ -75,9 +77,10 @@ public class NetworkManager : Manager {
     GameObject InstantiateNode(WordData word, Vector3 initPos){
         GameObject nodeObj = Instantiate(wordNodePrefab, initPos, new Quaternion(), nodeField);
         nodeObj.name = nodeObj.name.Replace("(Clone)", word.ToString());
-        nodeObj.GetComponent<Node>().wordData = word;
+        nodeObj.GetComponent<BNode>().wordData = word;
 
-        nodeObj.GetComponent<Node>().scaleCorrectly();
+        nodeObj.GetComponent<BNode>().scaleCorrectly();
+        nodeObj.GetComponent<BNode>().camera = camera;
         return nodeObj;  
     }
 
@@ -87,7 +90,7 @@ public class NetworkManager : Manager {
 
         GameObject nodeObj = InstantiateNode(word, pos);
 
-        while(nodeObj.GetComponent<Node>().colliding()){
+        while(nodeObj.GetComponent<BNode>().colliding()){
             maxRange += 10;
             nodeObj.transform.SetPositionAndRotation(pickRandomPoint(maxRange), new Quaternion());
         }
@@ -97,13 +100,13 @@ public class NetworkManager : Manager {
 
     GameObject createWordNodeArround(WordData word, GameObject solarCenter){
         Vector3 solarCenterPos = solarCenter.transform.position;
-        float radius = solarCenter.GetComponent<Node>().nodeBodyObj.GetComponent<SphereCollider>().radius + 2;
+        float radius = solarCenter.GetComponent<BNode>().nodeBodyObj.GetComponent<SphereCollider>().radius + 2;
 
         Vector3 newPos = pickPointOnSphere(solarCenterPos, radius);
 
         GameObject nodeObj = InstantiateNode(word, newPos);
         
-        while(nodeObj.GetComponent<Node>().colliding()){
+        while(nodeObj.GetComponent<BNode>().colliding()){
             radius += 2;
             nodeObj.transform.SetPositionAndRotation(pickPointOnSphere(solarCenterPos, radius), new Quaternion());
         }
@@ -136,13 +139,13 @@ public class NetworkManager : Manager {
         GameObject firstNodeObj = wordNodeDict[firstNode.getWord()];
         GameObject secondNodeObj = wordNodeDict[secondNode.word];
 
-        GameObject connector = Instantiate(connectionPrefab, firstNodeObj.GetComponent<Node>().connectorHolder.transform);
+        GameObject connector = Instantiate(connectionPrefab, firstNodeObj.GetComponent<BNode>().connectorHolder.transform);
 
         connector.GetComponent<Connection>().setEndPoints(firstNodeObj.gameObject, secondNodeObj);
 
 
-        firstNodeObj.GetComponent<Node>().followingNodes.Add(secondNodeObj);
-        secondNodeObj.GetComponent<Node>().followsNodes.Add(firstNodeObj);
+        firstNodeObj.GetComponent<BNode>().followingNodes.Add(secondNodeObj);
+        secondNodeObj.GetComponent<BNode>().followsNodes.Add(firstNodeObj);
 
         WordFreq firstWordFreq = new WordFreq();
         firstWordFreq.word = firstNode.wordFreq.word;
@@ -151,8 +154,8 @@ public class NetworkManager : Manager {
 
         connector.name = connector.name.Replace("Clone", firstWordFreq.ToString() + "->" + secondNode);
 
-        firstNodeObj.GetComponent<Node>().connectorDict.Add(secondNode, connector);
-        secondNodeObj.GetComponent<Node>().connectorDict.Add(firstWordFreq, connector);
+        firstNodeObj.GetComponent<BNode>().connectorDict.Add(secondNode, connector);
+        secondNodeObj.GetComponent<BNode>().connectorDict.Add(firstWordFreq, connector);
 
         return connector;
     }

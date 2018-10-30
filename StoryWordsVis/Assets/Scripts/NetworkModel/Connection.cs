@@ -23,8 +23,8 @@ public class Connection : MonoBehaviour {
     }
 
     public void reSetColors(){
-        string firstPOS = firstNode.GetComponent<Node>().wordData.getCommonPos();
-        string secondPOS = secondNode.GetComponent<Node>().wordData.getCommonPos();
+        string firstPOS = firstNode.GetComponent<BNode>().wordData.getCommonPos();
+        string secondPOS = secondNode.GetComponent<BNode>().wordData.getCommonPos();
         Color firstColor = PosCatHelpers.getColor(PosCatHelpers.getSimplePos(firstPOS));
         firstColor.a = 1f;
         Color secondColor = PosCatHelpers.getColor(PosCatHelpers.getSimplePos(secondPOS));
