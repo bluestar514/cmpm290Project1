@@ -2,64 +2,94 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class node : MonoBehaviour {
+public class Node : MonoBehaviour {
 
     public GameObject nodeBodyObj;
     public GameObject nameObj;
     public GameObject freqObj;
+    public GameObject connectorHolder;
 
-    public wordData wordData;
+    public WordData wordData;
 
-	void Start () {
-        
+    public List<GameObject> followingNodes;
+    public List<GameObject> followsNodes;
+
+    public Dictionary<WordFreq, GameObject> connectorDict;
+
+    public Bounds playerSphereOfInfluence;
+
+    void Awake() {
+        followingNodes = new List<GameObject>();
+        followsNodes = new List<GameObject>();
+
+        connectorDict = new Dictionary<WordFreq, GameObject>();
+    }
+
+    void Start() {
+
         nameObj.GetComponent<TextMesh>().text = wordData.getWord();
-        freqObj.GetComponent<TextMesh>().text = ""+wordData.getFreq();
+        freqObj.GetComponent<TextMesh>().text = "" + wordData.getFreq();
 
-        scaleCorrectly();
-	}
+        hideText();
+        setColor();
 
+    }
 
-    public float scaleCorrectly(){
-        nodeBodyObj.transform.localScale *= wordData.getFreq()/50;
+    public float scaleCorrectly() {
+        nodeBodyObj.transform.localScale *= wordData.getFreq();
+        //nameObj.transform.localScale *= wordData.getFreq();
+        //freqObj.transform.localScale *= wordData.getFreq();
 
-        return nodeBodyObj.GetComponent<SphereCollider>().radius*nodeBodyObj.transform.localScale.x;
+        //transform.localScale *= wordData.getFreq();
+
+        return nodeBodyObj.GetComponent<SphereCollider>().radius * nodeBodyObj.transform.localScale.x;
     }
 
 
-    public bool colliding(){
-        //Transform parent = transform.parent;
-
-        //Collider[] hitColliders = Physics.OverlapSphere(nodeBodyObj.transform.position, 
-        //                            nodeBodyObj.GetComponent<SphereCollider>().radius*nodeBodyObj.transform.localScale.x);
-        //int i = 0;
-        //while (i < hitColliders.Length){
-        //    if(hitColliders[i] == nodeBodyObj.GetComponent<Collider>()) continue;
-        //    else return true;
-        //}
-
-        //return false;
+    public bool colliding() {
+        Transform parent = transform.parent;
 
         Bounds myBound = nodeBodyObj.GetComponent<Collider>().bounds;
+
         foreach(Transform sibling in parent) {
             if(sibling == transform) continue;
             else {
-                Bounds siblingBound = sibling.GetComponent<node>().nodeBodyObj.GetComponent<Collider>().bounds;
+                Bounds siblingBound = sibling.GetComponent<Node>().nodeBodyObj.GetComponent<Collider>().bounds;
                 if(myBound.Intersects(siblingBound)) {
-                    print("Intersecting");
+                    //print("Intersecting");
                     return true;
                 }
                 if(siblingBound.Contains(transform.position)) {
-                    print("I am inside existing");
+                    //print("I am inside existing");
                     return true;
                 }
                 if(myBound.Contains(sibling.position)) {
-                    print("Existing is inside me");
+                    //print("Existing is inside me");
                     return true;
                 }
 
             }
         }
-        print("No collision");
+        //print("No collision");
         return false;
+    }
+
+    public void setColor() {
+        string nltkPos = wordData.getCommonPos();
+        PosCat simplePos = PosCatHelpers.getSimplePos(nltkPos);
+
+
+        nodeBodyObj.GetComponent<MeshRenderer>().material.color = PosCatHelpers.getColor(simplePos);
+
+    }
+
+    public void showText() {
+        nameObj.SetActive(true);
+        freqObj.SetActive(true);
+    }
+
+    public void hideText() {
+        nameObj.SetActive(false);
+        freqObj.SetActive(false);
     }
 }

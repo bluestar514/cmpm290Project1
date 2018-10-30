@@ -206,8 +206,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bde55a9487dd6e4388c6d76a08ab35f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  storyJsonFile: TheCoronation
   wordList: []
   wordNodePrefab: {fileID: 1485531038119630, guid: b3d78056942436444af7c977e07b4ef7,
+    type: 2}
+  connectionPrefab: {fileID: 1932432505274920, guid: b051e683032101f439d89c64ce267b7b,
     type: 2}
   nodeField: {fileID: 221311300}
 --- !u!4 &221311300
@@ -233,6 +236,7 @@ GameObject:
   - component: {fileID: 534669905}
   - component: {fileID: 534669904}
   - component: {fileID: 534669903}
+  - component: {fileID: 534669906}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: Untagged
@@ -268,7 +272,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 5000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -300,3 +304,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &534669906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 534669902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01ae5a912a3261e489139c66f634b074, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 50
+  turnSpeed: 20
