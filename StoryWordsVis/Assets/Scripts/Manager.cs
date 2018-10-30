@@ -190,4 +190,10 @@ public class Manager : MonoBehaviour {
             connection.GetComponent<Connection>().setLineAlpha(alpha + amount);
         }
     }
+
+    public void ClearConnections(){
+        foreach(GameObject connection in connectionList){
+            connection.GetComponent<Connection>().setLineAlpha(0);
+        }
+    }
 }

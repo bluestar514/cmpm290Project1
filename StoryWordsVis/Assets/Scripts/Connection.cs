@@ -26,7 +26,7 @@ public class Connection : MonoBehaviour {
         string firstPOS = firstNode.GetComponent<Node>().wordData.getCommonPos();
         string secondPOS = secondNode.GetComponent<Node>().wordData.getCommonPos();
         Color firstColor = PosCatHelpers.getColor(PosCatHelpers.getSimplePos(firstPOS));
-        firstColor.a = 0.5f;
+        firstColor.a = 1f;
         Color secondColor = PosCatHelpers.getColor(PosCatHelpers.getSimplePos(secondPOS));
         secondColor.a = 0.5f;
 
