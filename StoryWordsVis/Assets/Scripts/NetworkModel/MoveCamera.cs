@@ -10,7 +10,7 @@ public class MoveCamera : MonoBehaviour {
     public GameObject selectedObjectName;
     public GameObject selectedObjectFreq;
 
-    public Manager mnger;
+    public NetworkManager mnger;
     
     void Update() {
         if(Input.GetKey(KeyCode.W)) {

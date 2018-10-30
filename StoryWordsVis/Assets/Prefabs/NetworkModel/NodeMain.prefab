@@ -340,6 +340,9 @@ MonoBehaviour:
     posList: []
   followingNodes: []
   followsNodes: []
+  playerSphereOfInfluence:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
 --- !u!135 &135283634432348344
 SphereCollider:
   m_ObjectHideFlags: 1

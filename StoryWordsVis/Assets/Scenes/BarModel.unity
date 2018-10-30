@@ -485,7 +485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 50
-  turnSpeed: 20
+  turnSpeed: 50
   selectedObjectName: {fileID: 1138098633}
   selectedObjectFreq: {fileID: 121186986}
   mnger: {fileID: 221311299}
